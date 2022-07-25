@@ -1,6 +1,18 @@
 const std = @import("std");
 
-pub fn build(b: *std.build.Builder) void {
+const Build = std.build;
+const Pkg = Build.Pkg;
+const FileSource = Build.FileSource;
+
+const pkgs = struct {
+    const cn = Pkg{
+        .name = "cn",
+        .path = FileSource{.path = "./pkgs/cn/main.zig"},
+    };
+};
+
+
+pub fn build(b: *Build.Builder) void {
     // Standard target options allows the person running `zig build` to choose
     // what target to build for. Here we do not override the defaults, which
     // means any target is allowed, and the default is native. Other options
@@ -11,7 +23,8 @@ pub fn build(b: *std.build.Builder) void {
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall.
     const mode = b.standardReleaseOptions();
 
-    const exe = b.addExecutable("sample", "src/main.zig");
+    const exe = b.addExecutable("cnCalc", "examples/calc.zig");
+    exe.addPackage(pkgs.cn);
     exe.setTarget(target);
     exe.setBuildMode(mode);
     exe.install();
